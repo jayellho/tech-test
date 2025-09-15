@@ -11,6 +11,12 @@ RUN npm ci
 # Copy source code
 COPY . .
 
+# Set build-time environment variables from build args
+ARG NEXT_PUBLIC_ES_HOST
+ARG NEXT_PUBLIC_ES_INDEX
+ENV NEXT_PUBLIC_ES_HOST=$NEXT_PUBLIC_ES_HOST
+ENV NEXT_PUBLIC_ES_INDEX=$NEXT_PUBLIC_ES_INDEX
+
 # Build the application (without turbopack)
 RUN npx next build
 

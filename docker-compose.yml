@@ -3,6 +3,9 @@ services:
     build:
       context: ./search-ui
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_ES_HOST: ${NEXT_PUBLIC_ES_HOST}
+        NEXT_PUBLIC_ES_INDEX: ${NEXT_PUBLIC_ES_INDEX}
     container_name: search-ui
     env_file:
       - .env

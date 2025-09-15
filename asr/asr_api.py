@@ -19,20 +19,24 @@ print(f"Using STT model: {STT_MODEL}")
 SAMPLE_RATE = int(os.getenv("SAMPLE_RATE", "16000"))
 SUPPORTED_FILE_FORMATS = (".mp3", ".wav", ".flac", ".ogg", ".webm", ".opus")
 
-class Item(BaseModel):
-    name: str
-    price: float
-    is_offer: Union[bool, None] = None
+# private variables
+_processor = None
+_model = None
+_device = "cuda" if torch.cuda.is_available() else "cpu"
+
+# load model just once to speed up subsequent requests. 
+def _load_model_once():
+    global _processor, _model
+    if _processor is None or _model is None:
+        _processor = Wav2Vec2Processor.from_pretrained(STT_MODEL)
+        _model = Wav2Vec2ForCTC.from_pretrained(STT_MODEL).to(_device)
 
 def transcribe(audio_16k):
-    print("Loading model...")
-    processor = Wav2Vec2Processor.from_pretrained(STT_MODEL)
-    model = Wav2Vec2ForCTC.from_pretrained(STT_MODEL)
-    input_values = processor(audio_16k, sampling_rate=SAMPLE_RATE, return_tensors="pt", padding=True).input_values
-    logits = model(input_values).logits
+    _load_model_once()
+    input_values = _processor(audio_16k, sampling_rate=SAMPLE_RATE, return_tensors="pt", padding=True).input_values
+    logits = _model(input_values).logits
     predicted_ids = torch.argmax(logits, dim=-1)
-    print("Decoding...")
-    transcription = processor.batch_decode(predicted_ids)[0]
+    transcription = _processor.batch_decode(predicted_ids)[0]
     return transcription.strip()
 
 
@@ -74,7 +78,7 @@ async def asr(file: UploadFile):
                 os.remove(tmp_path)
             os.rmdir(tmpdir)
         except Exception as e:
-            pass
+            raise HTTPException(status_code=500, detail=f"Cleanup failed: {e}")
 
 if __name__ == "__main__":
     uvicorn.run("asr_api:app", host="0.0.0.0", port=8001, reload=False)

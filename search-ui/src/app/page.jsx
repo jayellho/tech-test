@@ -16,24 +16,26 @@ const config = {
   apiConnector: connector,
   initialState: { resultsPerPage: 10 },
   searchQuery: {
-    // Search in the transcribed text
+    // search in the transcribed text
     search_fields: { generated_text: {} },
 
-    // Fields returned for results
+    // fields returned for results
     result_fields: {
       generated_text: { snippet: { size: 300, fallback: true } },
       duration: { raw: {} },
       age: { raw: {} },
       gender: { raw: {} },
       accent: { raw: {} },
-      filename: { raw: {} },   // or "path" if you indexed that instead
+      filename: { raw: {} },
+      path: { raw: {} }, // filename is stored in this field
     },
 
-    // Facets/filters on keyword fields
+    // facets/filters on keyword fields
     facets: {
       age: { type: "value", size: 50 },
       gender: { type: "value", size: 10 },
-      accent: { type: "value", size: 100 }
+      accent: { type: "value", size: 100 },
+      duration_bucket: { type: "value", size: 10 }
     }
   }
 };

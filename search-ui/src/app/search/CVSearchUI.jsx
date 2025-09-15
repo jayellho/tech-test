@@ -32,6 +32,10 @@ export function CVSearchUI() {
             <Facet field="age" label="Age" />
             <Facet field="gender" label="Gender" />
             <Facet field="accent" label="Accent" />
+            <Facet 
+              field="duration_bucket" 
+              label="Duration"
+            />
           </div>
         }
         bodyHeader={
@@ -47,6 +51,7 @@ export function CVSearchUI() {
                 result.generated_text?.snippet ||
                 result.generated_text?.raw ||
                 "";
+              
               return (
                 <div className="sui-result p-4 rounded-lg border mb-3">
                   <div 
@@ -54,15 +59,19 @@ export function CVSearchUI() {
                     dangerouslySetInnerHTML={{ __html: text.toString() }}
                   />
                   <div className="sui-result__details text-sm text-gray-700">
-                    duration: {result.duration?.raw ?? ""}
-                    {" | "}
-                    age: {result.age?.raw ?? ""}
-                    {" | "}
-                    gender: {result.gender?.raw ?? ""}
-                    {" | "}
-                    accent: {result.accent?.raw ?? ""}
-                    {" | "}
-                    file: {result.filename?.raw ?? ""}
+                    {result.duration?.raw && (
+                      <>Duration: {result.duration.raw}s{" | "}</>
+                    )}
+                    {result.age?.raw && (
+                      <>Age: {result.age.raw}{" | "}</>
+                    )}
+                    {result.gender?.raw && (
+                      <>Gender: {result.gender.raw}{" | "}</>
+                    )}
+                    {result.accent?.raw && (
+                      <>Accent: {result.accent.raw}{" | "}</>
+                    )}
+                    File: {result.filename?.raw ?? result.path?.raw ?? "Unknown"}
                   </div>
                 </div>
               );

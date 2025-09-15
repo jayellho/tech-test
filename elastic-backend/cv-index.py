@@ -32,6 +32,22 @@ def _to_float_safe(x):
     except Exception:
         return None
 
+def _get_duration_bucket(duration):
+    """Convert duration to 5-second bucket label"""
+    if duration is None:
+        return "Unknown"
+    
+    if duration < 5:
+        return "0-5 seconds"
+    elif duration < 10:
+        return "5-10 seconds"
+    elif duration < 15:
+        return "10-15 seconds"
+    elif duration < 20:
+        return "15-20 seconds"
+    else:
+        return "20+ seconds"
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--csv", required=True, help="Path to cv-valid-dev.csv (with generated_text column)")
@@ -51,6 +67,7 @@ def main():
             "properties": {
                 "generated_text": {"type": "text", "fields": {"keyword": {"type": "keyword"}}},
                 "duration": {"type": "float"},
+                "duration_bucket": {"type": "keyword"},
                 "age": {"type": "keyword"},
                 "gender": {"type": "keyword"},
                 "accent": {"type": "keyword"},
@@ -73,9 +90,11 @@ def main():
 
     def gen_actions():
         for _, row in df.iterrows():
+            duration = _to_float_safe(row.get("duration"))
             doc = {
                 "generated_text": to_kw(row.get("generated_text")),
-                "duration": _to_float_safe(row.get("duration")),
+                "duration": duration,
+                "duration_bucket": _get_duration_bucket(duration),
                 "age": to_kw(row.get("age")),
                 "gender": to_kw(row.get("gender")),
                 "accent": to_kw(row.get("accent")),

@@ -39,7 +39,7 @@ services:
       - discovery.seed_hosts=es02
       - cluster.initial_master_nodes=es01,es02
       - xpack.security.enabled=false   # dev only - to enable this for prod.
-      - ES_JAVA_OPTS=-Xms2g -Xmx2g     # adjust to RAM
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m     # adjust to RAM
       # CORS settings to allow requests from frontend
       - http.cors.enabled=true
       - http.cors.allow-origin="http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001,http://search-ui:3000,http://localhost:9200"
@@ -64,7 +64,7 @@ services:
       - discovery.seed_hosts=es01
       - cluster.initial_master_nodes=es01,es02
       - xpack.security.enabled=false
-      - ES_JAVA_OPTS=-Xms2g -Xmx2g
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
       # CORS settings to allow requests from frontend
       - http.cors.enabled=true
       - http.cors.allow-origin="http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001,http://search-ui:3000,http://localhost:9200"

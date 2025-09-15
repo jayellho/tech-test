@@ -1,0 +1,84 @@
+services:
+  search-ui:
+    build:
+      context: ./search-ui
+      dockerfile: Dockerfile
+    container_name: search-ui
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    depends_on:
+      - es01
+    networks: [esnet]
+    restart: unless-stopped
+
+  asr-api:
+    build:
+      context: .
+      dockerfile: ./asr/Dockerfile
+    container_name: asr-api
+    env_file:
+      - .env
+    ports:
+      - "8001:8001"
+    volumes:
+      # mount common voice data folder as read-only in container to prevent accidental changes.
+      - ./common_voice:/app/:ro
+    restart: unless-stopped
+
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.1.3
+    container_name: es01
+    environment:
+      - node.name=es01
+      - cluster.name=cv-cluster
+      - discovery.seed_hosts=es02
+      - cluster.initial_master_nodes=es01,es02
+      - xpack.security.enabled=false   # dev only - to enable this for prod.
+      - ES_JAVA_OPTS=-Xms2g -Xmx2g     # adjust to RAM
+      # CORS settings to allow requests from frontend
+      - http.cors.enabled=true
+      - http.cors.allow-origin="http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001,http://search-ui:3000,http://localhost:9200"
+      - http.cors.allow-credentials=true
+      - http.cors.allow-headers="X-Requested-With,Content-Type,Content-Length,Authorization,Origin,Accept,Access-Control-Request-Headers,Access-Control-Request-Method,x-elastic-client-meta,X-Elastic-Client-Meta"
+      - http.cors.allow-methods="OPTIONS,HEAD,GET,POST,PUT,DELETE"
+    ulimits:
+      memlock: { soft: -1, hard: -1 }
+      nofile: { soft: 65535, hard: 65535 }
+    volumes:
+      - es01-data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks: [esnet]
+    restart: unless-stopped
+  es02:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.1.3
+    container_name: es02
+    environment:
+      - node.name=es02
+      - cluster.name=cv-cluster
+      - discovery.seed_hosts=es01
+      - cluster.initial_master_nodes=es01,es02
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms2g -Xmx2g
+      # CORS settings to allow requests from frontend
+      - http.cors.enabled=true
+      - http.cors.allow-origin="http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001,http://search-ui:3000,http://localhost:9200"
+      - http.cors.allow-credentials=true
+      - http.cors.allow-headers="X-Requested-With,Content-Type,Content-Length,Authorization,Origin,Accept,Access-Control-Request-Headers,Access-Control-Request-Method,x-elastic-client-meta,X-Elastic-Client-Meta"
+      - http.cors.allow-methods="OPTIONS,HEAD,GET,POST,PUT,DELETE"
+    ulimits:
+      memlock: { soft: -1, hard: -1 }
+      nofile: { soft: 65535, hard: 65535 }
+    volumes:
+      - es02-data:/usr/share/elasticsearch/data
+    networks: [esnet]
+    restart: unless-stopped
+
+networks:
+  esnet:
+
+volumes:
+  es01-data:
+  es02-data:

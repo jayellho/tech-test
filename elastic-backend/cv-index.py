@@ -1,5 +1,6 @@
 import argparse
 import math
+import os
 import pandas as pd
 from elasticsearch import Elasticsearch, helpers
 
@@ -34,7 +35,7 @@ def _to_float_safe(x):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--csv", required=True, help="Path to cv-valid-dev.csv (with generated_text column)")
-    parser.add_argument("--es", default="http://localhost:9200", help="Elasticsearch URL")
+    parser.add_argument("--es", default=os.getenv("NEXT_PUBLIC_ES_HOST", "http://localhost:9200"), help="Elasticsearch URL")
     parser.add_argument("--index", default="cv-transcriptions", help="Destination index")
     args = parser.parse_args()
 

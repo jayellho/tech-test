@@ -42,7 +42,7 @@ services:
       - ES_JAVA_OPTS=-Xms512m -Xmx512m     # adjust to RAM
       # CORS settings to allow requests from frontend
       - http.cors.enabled=true
-      - http.cors.allow-origin="http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001,http://search-ui:3000,http://localhost:9200"
+      - http.cors.allow-origin="http://${HOST_TYPE}:3000,http://127.0.0.1:3000,http://${HOST_TYPE}:3001,http://search-ui:3000,http://${HOST_TYPE}:9200"
       - http.cors.allow-credentials=true
       - http.cors.allow-headers="X-Requested-With,Content-Type,Content-Length,Authorization,Origin,Accept,Access-Control-Request-Headers,Access-Control-Request-Method,x-elastic-client-meta,X-Elastic-Client-Meta"
       - http.cors.allow-methods="OPTIONS,HEAD,GET,POST,PUT,DELETE"
@@ -67,7 +67,7 @@ services:
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
       # CORS settings to allow requests from frontend
       - http.cors.enabled=true
-      - http.cors.allow-origin="http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001,http://search-ui:3000,http://localhost:9200"
+      - http.cors.allow-origin="http://${HOST_TYPE}:3000,http://127.0.0.1:3000,http://${HOST_TYPE}:3001,http://search-ui:3000,http://${HOST_TYPE}:9200"
       - http.cors.allow-credentials=true
       - http.cors.allow-headers="X-Requested-With,Content-Type,Content-Length,Authorization,Origin,Accept,Access-Control-Request-Headers,Access-Control-Request-Method,x-elastic-client-meta,X-Elastic-Client-Meta"
       - http.cors.allow-methods="OPTIONS,HEAD,GET,POST,PUT,DELETE"

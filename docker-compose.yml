@@ -27,7 +27,7 @@ services:
       - "8001:8001"
     volumes:
       # mount common voice data folder as read-only in container to prevent accidental changes.
-      - ./common_voice:/app/:ro
+      - ./common_voice:/app/common_voice:ro
     restart: unless-stopped
 
   es01:

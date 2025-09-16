@@ -14,7 +14,7 @@
 ### What to run
 Assumption: Instructions below assume that service endpoints are running on AWS and transcription and indexing has not been done. In reality, transcription and indexing has already been done (so you can skip steps 3 and 4).
 
-1. Clone repository and download common voice dataset.
+1. Clone repository,download common voice dataset and create `.env`.
 ```bash
 # Clone repository
 git clone https://github.com/jayellho/tech-test.git
@@ -23,6 +23,9 @@ cd tech-test
 # Download dataset
 wget "https://www.dropbox.com/scl/fi/i9yvfqpf7p8uye5o8k1sj/common_voice.zip?rlkey=lz3dtjuhekc3xw4jnoeoqy5yu&dl=1" -O common_voice.zip
 unzip common_voice.zip
+
+# Rename .env_default
+mv .env_default .env
 ```
 
 2. (Optional) Set environment variables - if not done, just replace the variables below with the raw values here.

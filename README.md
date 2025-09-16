@@ -40,7 +40,7 @@ export DEPLOYMENT_URL=13.212.109.178
 ```bash
 cd asr
 pip install -r requirements.txt
-python cv-decode.py   --csv $INPUT_CSV_PATH   --audio_dir $INPUT_AUDIO_PATH   --api http://$DEPLOYMENT_URL$:8001/asr   --out_csv $OUTPUT_CSV_PATH
+python cv-decode.py   --csv $INPUT_CSV_PATH   --audio_dir $INPUT_AUDIO_PATH   --api http://$DEPLOYMENT_URL:8001/asr   --out_csv $OUTPUT_CSV_PATH
 ```
 4. Build index
 ```bash

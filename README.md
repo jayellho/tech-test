@@ -1,10 +1,5 @@
 # HTX Technical Test
 
-## Get started
-1. Single VM deployment
-2. Scalable deployment
-
-
 ### Deployment specifics
 1. Public IP: `13.212.109.178`
 2. Search UI: `http://13.212.109.178:3000`
@@ -48,7 +43,7 @@ cd elastic-backend
 python cv-index.py --csv $OUTPUT_CSV_PATH --es http://$DEPLOYMENT_URL:9200 --index cv-transcriptions
 ```
 
-## AWS Deployment
+## AWS Deployment - just for reference.
 ### Install Docker
 1. Install Docker with a convenience script.
 ```bash

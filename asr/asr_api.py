@@ -1,14 +1,12 @@
 from typing import Union
 import uvicorn
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI, UploadFile, HTTPException
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel
 import os
 import tempfile
 import librosa
 import numpy as np
 from transformers import Wav2Vec2Processor, Wav2Vec2ForCTC
-from datasets import load_dataset
 import torch
 from dotenv import load_dotenv
 
